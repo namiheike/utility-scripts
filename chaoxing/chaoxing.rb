@@ -7,6 +7,9 @@ series_url = ARGV.first
 episodes_amount = ARGV[1].to_i
 
 series_page = Nokogiri::HTML open(series_url)
+series_title = series_page.css('.videoIntr h1')[0].text
+
+puts `mkdir -p #{series_title}`
 
 episode_urls = series_page.css('.albumInfo .dmode .screen ul li a').map{|a| 'http://video.chaoxing.com' + a['href']}[0..episodes_amount-1]
 
@@ -24,7 +27,7 @@ episode_urls.each_with_index do |e, index|
 
   threads << Thread.new(episode) do |episode|
     puts episode
-    puts `wget -c #{episode[:url]} -O #{episode[:filename]}`
+    puts `wget -c #{episode[:url]} -O #{series_title}/#{episode[:filename]}`
     # puts `aria2c -x 10 -o #{episode[:filename]} #{episode[:url]}`
   end
 end

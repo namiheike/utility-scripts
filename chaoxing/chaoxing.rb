@@ -3,6 +3,8 @@
 require 'open-uri'
 require 'nokogiri'
 
+# require 'byebug'
+
 series_url = ARGV.first
 episodes_amount = ARGV[1].to_i
 
@@ -20,8 +22,8 @@ episode_urls.each_with_index do |e, index|
   flvcd_page = Nokogiri::HTML open(flvcd_url), nil, 'gbk'
 
   episode = {
-    url: flvcd_page.css('tr[style*="table-layout:fixed"] th table:nth-child(2) tr:first-child td.mn.STYLE4 a')[0]['href'],
-    name: flvcd_page.search('script')[4].children[0].text.split(' + ')[0].split(' = ')[1][1..-2],
+    url: flvcd_page.at('td:contains("复制文件名")').children[3]['href'],
+    name: flvcd_page.at('td:contains("当前解析视频：")').children[2].text.rstrip.lstrip,
   }
   episode[:filename] = "#{index+1}-#{episode[:name]}.flv"
 
@@ -30,6 +32,9 @@ episode_urls.each_with_index do |e, index|
     puts `wget -c #{episode[:url]} -O #{series_title}/#{episode[:filename]}`
     # puts `aria2c -x 10 -o #{episode[:filename]} #{episode[:url]}`
   end
+
+  # sleep to avoid being banned by flvcd
+  sleep 3
 end
 
 threads.each { |aThread|  aThread.join }

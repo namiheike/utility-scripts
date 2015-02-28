@@ -30,7 +30,7 @@ episode_urls.each_with_index do |e, index|
   threads << Thread.new(episode) do |episode|
     puts episode
     puts `wget -c #{episode[:url]} -O #{series_title}/#{episode[:filename]}`
-    # puts `aria2c -x 10 -o #{episode[:filename]} #{episode[:url]}`
+    # puts `aria2c -x10 -o #{series_title}/#{episode[:filename]} #{episode[:url]}`
   end
 
   # sleep to avoid being banned by flvcd

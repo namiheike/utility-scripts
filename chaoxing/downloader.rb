@@ -18,6 +18,10 @@ episode_urls = series_page.css('.albumInfo .dmode .screen ul li a').map{|a| 'htt
 threads = []
 
 episode_urls.each_with_index do |e, index|
+  # byebug
+  # puts '==='
+  # puts "thread ##{index}"
+
   flvcd_url = "http://www.flvcd.com/parse.php?format=&kw=#{e}"
   flvcd_page = Nokogiri::HTML open(flvcd_url), nil, 'gbk'
 
@@ -27,6 +31,8 @@ episode_urls.each_with_index do |e, index|
   }
   episode[:filename] = "#{index+1}-#{episode[:name]}.flv"
 
+  # puts episode
+
   threads << Thread.new(episode) do |episode|
     puts episode
     puts `wget -c #{episode[:url]} -O #{series_title}/#{episode[:filename]}`
@@ -34,7 +40,7 @@ episode_urls.each_with_index do |e, index|
   end
 
   # sleep to avoid being banned by flvcd
-  sleep 300
+  sleep 3
 end
 
 threads.each { |aThread|  aThread.join }

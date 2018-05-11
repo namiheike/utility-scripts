@@ -22,14 +22,17 @@ Dir.glob("#{series_title}/*.*") do |f|
   path = Pathname.new f
   next if ( path.basename.to_s == 'episodes.json' ) or ( path.basename.to_s == 'urls.txt' )
   next if ( File.extname(f) == '.td' ) or ( File.extname(f) == '.cfg' )
-  while not File.extname(f).empty?
-    basename = File.basename f, File.extname(f)
-    File.rename path.to_s, "#{series_title}/#{basename}"
+
+  while not File.extname(path.to_s).empty?
+    basename = File.basename path.to_s, File.extname(path.to_s)
+    new_path = "#{series_title}/#{basename}"
+    File.rename path.to_s, new_path
+    path = Pathname.new new_path
   end
 end
 
 episodes.each do |e|
   if File.exist? "#{series_title}/#{e[:download_filename]}"
-    puts File.rename "#{series_title}/#{e[:download_filename]}", "#{series_title}/#{e[:filename]}"
+    File.rename "#{series_title}/#{e[:download_filename]}", "#{series_title}/#{e[:filename]}"
   end
 end

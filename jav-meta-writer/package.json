@@ -1,0 +1,13 @@
+{
+  "name": "jav-meta-writer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-polyfill": "^6.26.0",
+    "javlibrary-api": "ken113/javlibrary-api",
+    "sleep": "^5.1.1",
+    "uuid": "^3.3.2"
+  }
+}
